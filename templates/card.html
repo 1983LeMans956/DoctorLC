@@ -5,53 +5,124 @@
     <title>Карта осмотра</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
 <nav>
-    <div class="nav-wrapper">
+    <div class="nav-wrapper" style="padding-left: 10px; font-size: 200%;">
         <ul id="nav-mobile" class="left hide-on-med-and-down">
             <li> <a href="/">Главное окно</a></li>
             <li> <a href="/records">График записей пациентов</a></li>
       </ul>
     </div>
 </nav>
-
+<div class="collection">
+        <a class="collection-item">Карта осмотра пациента</a>
+</div>
 <form method="POST">
     <fieldset>
         <legend>Пациент</legend>
-        <label for="first_name">ФИО</label>
         <div class="input-field col s6">
-            <select id="first_name" name="patient" onchange="location = this.value;" class="browser-default">
-                {% for id, fio, date, _, _, _ in patients %}
-                    <option value="{{ url_for('card', patient_id=id) }}"
-                            {% if current[0] == id %} selected {% endif %}>{{ fio }}</option>
-                {% endfor %}
-            </select>
+            <div class="col s12 m12">
+                <label for="first_name">ФИО</label>
+                <select id="first_name" class="browser-default" name="patient" onchange="location = this.value;">
+                    {% for id, fio, date, _, _, _ in patients %}
+                        <option value="{{ url_for('card', patient_id=id) }}"
+                                {% if current[0] == id %} selected {% endif %}>{{ fio }}</option>
+                    {% endfor %}
+                </select>
+            </div>
         </div>
-        <label for="birthday">Дата рождения</label>
         <div class="input-field col s6">
             <input disabled value="{{ current[2] }}" id="birthday" type="text" class="validate">
+            <label for="birthday">Дата рождения</label>
         </div>
-          <input class="waves-effect btn" name="submit" value="Результаты анализов" type="submit">
+        <input class="waves-effect btn" name="submit" value="Результаты анализов" type="submit">
     </fieldset>
 
     <fieldset>
         <legend>Результаты приема</legend>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% if messages[0] == "Заполните все поля" %}
+                    <div class="materialert error">
+                        <div class="material-icons">error</div>
+                        {{ messages[0] }}
+                    </div>
+                {% else %}
+                    <div class="materialert info">
+                        <div class="material-icons">info_outline</div>
+                        {{ messages[0] }}
+                    </div>
+                {% endif %}
+            {% endif %}
+        {% endwith %}
         <label for="textarea1">Жалобы пациента</label>
-        <textarea id="textarea1" class="materialize-textarea" name="complaint" required="">{{ current[4] }}</textarea>
+        <textarea id="textarea1" class="materialize-textarea" name="complaint">{{ current[4] }}</textarea>
 
         <label for="textarea2">Диагноз</label>
-        <textarea id="textarea2" class="materialize-textarea" name="diagnosis" required="">{{ current[3] }}</textarea>
+        <textarea id="textarea2" class="materialize-textarea" name="diagnosis">{{ current[3] }}</textarea>
 
         <label for="textarea3">Лечение</label>
-        <textarea id="textarea3" class="materialize-textarea" name="treatment" required="">{{ current[5] }}</textarea>
+        <textarea id="textarea3" class="materialize-textarea" name="treatment">{{ current[5] }}</textarea>
 
 
         <div class="row">
-            <input class="waves-effect btn" name="submit" value="Выдать направление на анализы" type="submit">
-            <input class="waves-effect btn" name="submit" value="Сохранить результаты приёма" type="submit">
+            <input class="waves-effect btn" name="submit" value="Направление на анализы" type="submit">
+            <input class="waves-effect btn" name="submit" value="Сохранить" type="submit">
         </div>
     </fieldset>
 </form>
 </body>
+<style>
+    .row {
+        margin-top: 40px;
+        float: right;
+    }
+
+    .input-field.col label {
+        left: 0;
+    }
+
+    .materialert {
+        position: relative;
+        min-width: 150px;
+        padding: 15px;
+        margin-bottom: 20px;
+        margin-top: 15px;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        transition: all 0.1s linear;
+        webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-align: center;
+        -webkit-align-items: center;
+        -ms-flex-align: center;
+        align-items: center;
+    }
+
+    .materialert .material-icons {
+        margin-right: 10px;
+    }
+
+    .materialert.info {
+        background-color: #039be5;
+        color: #fff;
+    }
+
+    .materialert.warning {
+        background-color: #fbc02d;
+        color: #fff;
+    }
+
+    .materialert.error {
+        background-color: #c62828;
+        color: #fff;
+    }
+</style>
 </html>

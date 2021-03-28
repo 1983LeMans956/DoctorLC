@@ -8,13 +8,16 @@
 </head>
 <body>
 <nav>
-    <div class="nav-wrapper">
-        <ul id="nav-mobile" class="left hide-on-med-and-down">
+    <div class="nav-wrapper" style="padding-left: 10px; font-size: 200%;">
+         <ul id="nav-mobile" class="left hide-on-med-and-down">
             <li> <a href="/">Главное окно</a></li>
             <li> <a href="/card/1">Карта осмотра пациента</a></li>
       </ul>
     </div>
 </nav>
+<div class="collection">
+        <a class="collection-item">График записей пациентов</a>
+</div>
 <div>
     <div class="col s12 m7">
         {% for fio, birthday, snils, polis, address, phone, date in register %}
@@ -23,7 +26,7 @@
                 <div class="card-stacked">
                     <div class="card-content">
                         <h5>{{ fio }}</h5>
-                        <h6>Дата и время приема: {{  date }}</h6>
+                        <h6>Дата приема {{ date }}</h6>
                         <p>День рождения: {{ birthday }}</p>
                         <p>СНИЛС: {{ snils }}</p>
                         <p>Полис: {{ polis }}</p>
